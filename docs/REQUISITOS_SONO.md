@@ -1,16 +1,18 @@
-# Projeto CardioCheck: Aplicação Mobile para Verificação de Risco de Doença Cardíaca e Qualidade do Sono
+# Projeto HealthCheck: Aplicação Mobile para Verificação de Risco de Doença Cardíaca e Qualidade do Sono
 
 ## Memorial Descritivo do Projeto
 
 ## Visão Geral
-O CardioCheck evolui para uma plataforma abrangente de saúde que combina duas funcionalidades principais: avaliação de risco cardíaco e análise da qualidade do sono. A aplicação mobile para dispositivos Android utiliza inteligência artificial para processar dados fornecidos pelo usuário em ambos os módulos, oferecendo insights valiosos sobre a saúde cardiovascular e padrões de sono.
+O HealthCheck evolui para uma plataforma abrangente de saúde que combina duas funcionalidades principais: avaliação de risco cardíaco e análise da qualidade do sono. A aplicação mobile para dispositivos Android utiliza inteligência artificial para processar dados fornecidos pelo usuário em ambos os módulos, oferecendo insights valiosos sobre a saúde cardiovascular e padrões de sono.
 
 O módulo cardíaco mantém sua funcionalidade original, coletando informações como sintomas, resultados de exames, frequência cardíaca, idade e sexo. O novo módulo de sono analisa dados como duração do sono, qualidade percebida, nível de atividade física, estresse, IMC e outros fatores relacionados ao bem-estar geral.
 
 ## Arquitetura do Sistema
 O sistema é composto por cinco componentes principais:
 
-**Aplicação Mobile (Frontend)**: Desenvolvida em C# utilizando o framework .NET MAUI para garantir uma interface responsiva e intuitiva para dispositivos Android, agora com duas seções principais: Cardíaco e Sono.
+**Aplicação Mobile**: Desenvolvida em C# utilizando o framework .NET MAUI para garantir uma interface responsiva e intuitiva para dispositivos Android, agora com duas seções principais: Cardíaco e Sono.
+
+**Aplicação Web (Frontend)**: Desenvolvida em React com JavaScript/TypeScript, aproveitando o ecossistema de componentes reutilizáveis e o gerenciamento eficiente de estado para garantir uma interface responsiva e intuitiva que funciona perfeitamente em diferentes navegadores e dispositivos, agora com duas seções principais: Cardíaco e Sono.
 
 **API Gateway**: Implementada em Node.js com Express, responsável por gerenciar as requisições do aplicativo, roteamento entre módulos, autenticação de usuários e orquestração das comunicações.
 
@@ -76,6 +78,8 @@ O sistema é composto por cinco componentes principais:
 - Visualizar histórico de avaliações
 - Filtrar por tipo de avaliação
 - Exportar relatórios
+
+![alt text](uc.png)
 
 ## Análise de Requisitos
 
@@ -306,52 +310,18 @@ O sistema é composto por cinco componentes principais:
 
 As doenças cardiovasculares continuam sendo a principal causa de morte no mundo, e os distúrbios do sono afetam aproximadamente 30% da população adulta, segundo estudos recentes. A qualidade do sono inadequada está associada a diversos problemas de saúde, incluindo obesidade, diabetes, depressão e redução da qualidade de vida.
 
-O CardioCheck expandido visa oferecer uma abordagem mais holística da saúde, permitindo que profissionais médicos avaliem dois aspectos fundamentais do bem-estar de seus pacientes. A análise da qualidade do sono complementa a avaliação cardíaca, fornecendo um panorama mais completo da saúde do indivíduo.
+O HealthCheck expandido visa oferecer uma abordagem mais holística da saúde, permitindo que profissionais médicos avaliem dois aspectos fundamentais do bem-estar de seus pacientes. A análise da qualidade do sono complementa a avaliação cardíaca, fornecendo um panorama mais completo da saúde do indivíduo.
 
 A escolha das tecnologias permite o desenvolvimento de uma solução robusta, escalável e segura, capaz de processar dados sensíveis de saúde com a devida proteção e confiabilidade. O uso de inteligência artificial possibilita a análise de múltiplos fatores de risco simultaneamente, oferecendo uma avaliação mais abrangente do que métodos tradicionais de triagem.
 
 ## Diagrama de Classes do Banco de Dados
 
-```
-+-------------------+    +----------------------+    +-------------------+
-|     Usuario       |    |     Avaliacao        |    |   Recomendacao    |
-+-------------------+    +----------------------+    +-------------------+
-| id: UUID          |    | id: UUID             |    | id: UUID          |
-| nome: String      |    | usuario_id: UUID     |<-->| avaliacao_id: UUID|
-| idade: Integer    |<-->| tipo: Enum           |    | texto: Text       |
-| sexo: Enum        |    | data: DateTime       |    | tipo: Enum        |
-| email: String     |    | resultado: JSON      |    | modulo: Enum      |
-| senha: String     |    | dados_entrada: JSON  |    | criado_em: DateTime|
-| endereco: String  |    | modulo: Enum         |    +-------------------+
-| telefone: String  |    | criado_em: DateTime  |
-| cpf: String       |    +----------------------+
-| criado_em: DateTime|
-+-------------------+    +----------------------+    +-------------------+
-                         |   AvaliacaoSono      |    | RecomendacaoSono  |
-                         +----------------------+    +-------------------+
-                         | id: UUID             |    | id: UUID          |
-                         | avaliacao_id: UUID   |<-->| avaliacao_id: UUID|
-                         | duracao_sono: Float  |    | texto: Text       |
-                         | qualidade_sono: Int  |    | tipo: Enum        |
-                         | atividade_fisica: Int|    | modulo: Enum      |
-                         | nivel_estresse: Int  |    | criado_em: DateTime|
-                         | categoria_imc: Enum  |    +-------------------+
-                         | pressao_arterial: String|
-                         | freq_cardiaca: Int   |
-                         | passos_diarios: Int  |
-                         | disturbio_sono: Enum |
-                         +----------------------+
-```
+![alt text](<BD_2.png>)
 
 ## BPMN
 
 ### 1. Processo Principal
-```
-[Início] --> [Cadastro/Login] --> [Seleção de Módulo] 
---> <Módulo Cardíaco?> --> [Sim] --> [Questionário Cardíaco] --> [Processamento Cardíaco]
---> [Não] --> [Questionário Sono] --> [Processamento Sono]
---> [Geração de Resultado] --> [Exibição e Recomendações] --> [Armazenamento] --> [Fim]
-```
+![alt text](<BPMN1.png>)
 
 ### 2. Subprocesso: Cadastro de Usuário
 ![alt text](<BPMN2.png>)
@@ -363,13 +333,6 @@ A escolha das tecnologias permite o desenvolvimento de uma solução robusta, es
 ![alt text](<BPMN4.png>)
 
 ![alt text](<BPMN5.png>)
-
-### 5. Subprocesso: Seleção de Módulo
-```
-[Início] --> [Exibição Dashboard] --> [Escolha do Usuário]
---> <Módulo Cardíaco?> --> [Sim] --> [Ativar Contexto Cardíaco] --> [Fim]
---> [Não] --> [Ativar Contexto Sono] --> [Fim]
-```
 
 ## Detalhamento das Telas
 
