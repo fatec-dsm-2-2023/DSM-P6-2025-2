@@ -73,7 +73,7 @@ export class QuestionarioService {
 			// Montar o payload da mensagem para o NATS
 			const messagePayload = {
 				// requestId,
-				requestId: questionario.id,
+				requestId: avaliacao.id,
 				data: modelInput, // Enviar o array de números diretamente
 			};
 

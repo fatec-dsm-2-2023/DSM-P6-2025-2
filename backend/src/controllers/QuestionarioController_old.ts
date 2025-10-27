@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { QuestionarioService } from "../services/QuestionarioService_old";
+import { QuestionarioService } from "../services/QuestionarioService";
 import { validationResult } from "express-validator";
 
 export class QuestionarioController {
@@ -21,7 +21,7 @@ export class QuestionarioController {
             const medicoId = req.userId; // Vem do middleware de autenticação
 
             const resultado =
-                await this.questionarioService.processQuestionario(
+                await this.questionarioService.startAnalysis(
                     questionarioData,
                     medicoId
                 );

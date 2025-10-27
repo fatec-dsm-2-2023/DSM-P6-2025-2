@@ -3,7 +3,6 @@ import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { AppDataSource } from "./config/database";
-import routes from "./routes";
 import errorMiddleware from "./middlewares/errorMiddleware";
 import { NatsService, NatsConfig } from "./services/NatsService"; // 1. Importe o serviço
 import { ResultConsumerService } from "./services/ResultConsumerService";
@@ -91,5 +90,8 @@ async function startServer() {
 }
 
 startServer();
+
+// Importar as rotas
+import routes from "./routes";
 
 export default app;

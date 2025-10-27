@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { QuestionarioController } from "../controllers/QuestionarioController_old";
+import { QuestionarioController } from "../controllers/QuestionarioController";
 import authMiddleware from "../middlewares/authMiddleware";
 import { body } from "express-validator";
 
