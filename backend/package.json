@@ -7,8 +7,7 @@
         "start": "node dist/app.js",
         "dev": "nodemon src/app.ts",
         "build": "tsc",
-        "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js",
-        "postinstall": "node install-python-deps.js"
+        "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js"
     },
     "dependencies": {
         "bcryptjs": "^3.0.2",
