@@ -181,7 +181,7 @@ const QuestionarioPage: React.FC = () => {
                                 placeholder="Nome completo"
                                 className="input "
                             />
-                        </div>
+                        </div>                        
 
                         <div className="form-group">
                             <label htmlFor="age">Idade</label>

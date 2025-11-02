@@ -1,6 +1,6 @@
 import React, { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { Moon } from "lucide-react";
+import { Moon, Info } from "lucide-react";
 import api from "../services/api";
 import { type IQuestionarioSono, type IResultadoSono } from "../types";
 import "./QuestionarioSonoPage.css";
@@ -20,6 +20,52 @@ const initialFormState: IQuestionarioSono = {
     passosDiarios: 6000,
     disturbioSono: "None",
 };
+
+interface SliderFieldProps {
+    label: React.ReactNode;
+    name: keyof IQuestionarioSono;
+    value: number;
+    min: number;
+    max: number;
+    step?: number;
+    unit: string;
+    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+}
+
+const SliderField: React.FC<SliderFieldProps> = ({
+    label,
+    name,
+    value,
+    min,
+    max,
+    step = 1,
+    unit,
+    onChange
+}) => (
+    <div className="slider-field-wrapper">
+        <div className="form-group">
+            <label htmlFor={name.toString()}>{label}</label>
+            <div className="slider-container">
+                <div className="slider-header">
+                    <span className="slider-value">
+                        {value} {unit}
+                    </span>
+                </div>
+                <input
+                    type="range"
+                    id={name.toString()}
+                    name={name.toString()}
+                    min={min}
+                    max={max}
+                    step={step}
+                    value={value}
+                    onChange={onChange}
+                    className="slider"
+                />
+            </div>
+        </div>
+    </div>
+);
 
 const QuestionarioSonoPage: React.FC = () => {
     const [formData, setFormData] = useState<IQuestionarioSono>(initialFormState);
@@ -79,275 +125,227 @@ const QuestionarioSonoPage: React.FC = () => {
     };
 
     return (
-        <div className="questionario-sono-container">
-            <div className="questionario-sono-header">
+        <div className="questionario-container">
+            <div className="questionario-header">
                 <h2>Avaliação da Qualidade do Sono</h2>
                 <p>
                     Analise padrões de sono e identifique possíveis distúrbios do sono
                 </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="questionario-sono-form">
-                <div className="form-grid">
-                    {/* Linha 1 */}
-                    <div className="form-group">
-                        <label htmlFor="nome">Nome do Paciente</label>
-                        <input
-                            type="text"
-                            id="nome"
-                            name="nome"
-                            value={formData.nome}
-                            onChange={handleChange}
-                            placeholder="Nome completo"
-                            className="input"
-                        />
+            <form onSubmit={handleSubmit} className="questionario-form">
+                <div className="form-section">
+                    <div className="section-header">
+                        <h3>Dados Pessoais</h3>
                     </div>
-
-                    <div className="form-group">
-                        <label htmlFor="genero">Gênero</label>
-                        <select
-                            id="genero"
-                            name="genero"
-                            value={formData.genero}
-                            onChange={handleChange}
-                            className="form-select"
-                        >
-                            <option value="Male">Masculino</option>
-                            <option value="Female">Feminino</option>
-                        </select>
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="idade">Idade</label>
-                        <div className="slider-container">
-                            <div className="slider-header">
-                                <span className="slider-value personal">
-                                    {formData.idade} anos
-                                </span>
-                            </div>
+                    <div className="section-grid personal-data-grid">
+                        <div className="form-group">
+                            <label htmlFor="nome">Nome do Paciente</label>
                             <input
-                                type="range"
+                                type="text"
+                                id="nome"
+                                name="nome"
+                                value={formData.nome}
+                                onChange={handleChange}
+                                placeholder="Nome completo"
+                                className="input"
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="genero">Gênero</label>
+                            <select
+                                id="genero"
+                                name="genero"
+                                value={formData.genero}
+                                onChange={handleChange}
+                                className="form-select"
+                            >
+                                <option value="Male">Masculino</option>
+                                <option value="Female">Feminino</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="idade">Idade</label>
+                            <input
+                                type="number"
                                 id="idade"
                                 name="idade"
-                                min="27"
-                                max="59"
                                 value={formData.idade}
                                 onChange={handleChange}
-                                className="slider personal"
+                                min="27"
+                                max="59"
+                                className="input"
+                                required
                             />
-                            <div className="slider-labels">
-                                <span>27</span>
-                                <span>59</span>
-                            </div>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="ocupacao">Ocupação</label>
+                            <select
+                                id="ocupacao"
+                                name="ocupacao"
+                                value={formData.ocupacao}
+                                onChange={handleChange}
+                                className="form-select"
+                            >
+                                {ocupacoes.map((ocupacao) => (
+                                    <option key={ocupacao} value={ocupacao}>
+                                        {ocupacao}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
                     </div>
+                </div>
 
-                    <div className="form-group">
-                        <label htmlFor="ocupacao">Ocupação</label>
-                        <select
-                            id="ocupacao"
-                            name="ocupacao"
-                            value={formData.ocupacao}
-                            onChange={handleChange}
-                            className="form-select"
-                        >
-                            {ocupacoes.map((ocupacao) => (
-                                <option key={ocupacao} value={ocupacao}>
-                                    {ocupacao}
-                                </option>
-                            ))}
-                        </select>
+                <div className="form-section">
+                    <div className="section-header">
+                        <h3>Dados de Sono e Saúde</h3>
                     </div>
-
-                    <div className="form-group">
-                        <label htmlFor="categoriaIMC">IMC</label>
-                        <select
-                            id="categoriaIMC"
-                            name="categoriaIMC"
-                            value={formData.categoriaIMC}
-                            onChange={handleChange}
-                            className="form-select"
-                        >
-                            {categoriasIMC.map((categoria) => (
-                                <option key={categoria} value={categoria}>
-                                    {categoria === "Normal" ? "Normal" :
-                                        categoria === "Overweight" ? "Sobrepeso" : "Obeso"}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-                    {/* Linha 2 */}
-                    <div className="form-group">
-                        <label htmlFor="duracaoSono">Duração do Sono</label>
-                        <div className="slider-container">
-                            <div className="slider-header">
-                                <span className="slider-value sleep">
-                                    {formData.duracaoSono.toFixed(1)}h
-                                </span>
+                    <div className="exams-symptoms-grid">
+                        <div className="grid-column">
+                            <div className="column-header">
+                                <h4>Padrões de Sono</h4>
                             </div>
-                            <input
-                                type="range"
-                                id="duracaoSono"
-                                name="duracaoSono"
-                                min="5.8"
-                                max="8.5"
-                                step="0.1"
-                                value={formData.duracaoSono}
-                                onChange={handleChange}
-                                className="slider sleep"
-                            />
-                            <div className="slider-labels">
-                                <span>5.8h</span>
-                                <span>8.5h</span>
+                            <div className="column-content">
+                                <SliderField
+                                    label="Duração do Sono"
+                                    name="duracaoSono"
+                                    value={formData.duracaoSono}
+                                    min={5.8}
+                                    max={8.5}
+                                    step={0.1}
+                                    unit="horas"
+                                    onChange={handleChange}
+                                />
+
+                                <SliderField
+                                    label={
+                                        <>
+                                            Qualidade do Sono
+                                            <Info size={14} className="info-icon" />
+                                        </>
+                                    }
+                                    name="qualidadeSono"
+                                    value={formData.qualidadeSono}
+                                    min={1}
+                                    max={10}
+                                    unit="/10"
+                                    onChange={handleChange}
+                                />
+
+                                <div className="form-group">
+                                    <label htmlFor="disturbioSono">Distúrbio do Sono</label>
+                                    <select
+                                        id="disturbioSono"
+                                        name="disturbioSono"
+                                        value={formData.disturbioSono}
+                                        onChange={handleChange}
+                                        className="form-select"
+                                    >
+                                        {disturbiosSono.map((disturbio) => (
+                                            <option key={disturbio} value={disturbio}>
+                                                {disturbio === "None" ? "Nenhum" : 
+                                                 disturbio === "Sleep Apnea" ? "Apneia do Sono" : 
+                                                 "Insônia"}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div className="form-group">
-                        <label htmlFor="qualidadeSono">Qualidade do Sono</label>
-                        <div className="slider-container">
-                            <div className="slider-header">
-                                <span className="slider-value sleep">
-                                    {formData.qualidadeSono}/10
-                                </span>
+                        <div className="grid-column">
+                            <div className="column-header">
+                                <h4>Indicadores de Saúde</h4>
                             </div>
-                            <input
-                                type="range"
-                                id="qualidadeSono"
-                                name="qualidadeSono"
-                                min="1"
-                                max="10"
-                                value={formData.qualidadeSono}
-                                onChange={handleChange}
-                                className="slider sleep"
-                            />
-                            <div className="slider-labels">
-                                <span>1</span>
-                                <span>10</span>
-                            </div>
-                        </div>
-                    </div>
+                            <div className="column-content">
+                                <div className="form-group">
+                                    <label htmlFor="categoriaIMC">Categoria de IMC</label>
+                                    <select
+                                        id="categoriaIMC"
+                                        name="categoriaIMC"
+                                        value={formData.categoriaIMC}
+                                        onChange={handleChange}
+                                        className="form-select"
+                                    >
+                                        {categoriasIMC.map((categoria) => (
+                                            <option key={categoria} value={categoria}>
+                                                {categoria === "Normal" ? "Normal" :
+                                                 categoria === "Overweight" ? "Sobrepeso" : "Obeso"}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
 
-                    <div className="form-group">
-                        <label htmlFor="disturbioSono">Distúrbio do Sono</label>
-                        <select
-                            id="disturbioSono"
-                            name="disturbioSono"
-                            value={formData.disturbioSono}
-                            onChange={handleChange}
-                            className="form-select"
-                        >
-                            {disturbiosSono.map((disturbio) => (
-                                <option key={disturbio} value={disturbio}>
-                                    {disturbio === "None" ? "Nenhum" : disturbio}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+                                <div className="form-group">
+                                    <label htmlFor="pressaoArterial">Pressão Arterial</label>
+                                    <input
+                                        type="text"
+                                        id="pressaoArterial"
+                                        name="pressaoArterial"
+                                        placeholder="Ex: 120/80"
+                                        value={formData.pressaoArterial}
+                                        onChange={handleChange}
+                                        className="input"
+                                        required
+                                    />
+                                </div>
 
-                    <div className="form-group">
-                        <label htmlFor="nivelAtividadeFisica">Atividade Física</label>
-                        <div className="slider-container">
-                            <div className="slider-header">
-                                <span className="slider-value health">
-                                    {formData.nivelAtividadeFisica}
-                                </span>
-                            </div>
-                            <input
-                                type="range"
-                                id="nivelAtividadeFisica"
-                                name="nivelAtividadeFisica"
-                                min="30"
-                                max="90"
-                                value={formData.nivelAtividadeFisica}
-                                onChange={handleChange}
-                                className="slider health"
-                            />
-                            <div className="slider-labels">
-                                <span>30</span>
-                                <span>90</span>
+                                <div className="form-group">
+                                    <label htmlFor="frequenciaCardiaca">Frequência Cardíaca</label>
+                                    <input
+                                        type="number"
+                                        id="frequenciaCardiaca"
+                                        name="frequenciaCardiaca"
+                                        min="65"
+                                        max="86"
+                                        value={formData.frequenciaCardiaca}
+                                        onChange={handleChange}
+                                        className="input"
+                                        required
+                                    />
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div className="form-group">
-                        <label htmlFor="nivelEstresse">Nível de Estresse</label>
-                        <div className="slider-container">
-                            <div className="slider-header">
-                                <span className="slider-value health">
-                                    {formData.nivelEstresse}/8
-                                </span>
+                        <div className="grid-column">
+                            <div className="column-header">
+                                <h4>Atividade e Estilo de Vida</h4>
                             </div>
-                            <input
-                                type="range"
-                                id="nivelEstresse"
-                                name="nivelEstresse"
-                                min="3"
-                                max="8"
-                                value={formData.nivelEstresse}
-                                onChange={handleChange}
-                                className="slider health"
-                            />
-                            <div className="slider-labels">
-                                <span>3</span>
-                                <span>8</span>
-                            </div>
-                        </div>
-                    </div>
+                            <div className="column-content">
+                                <SliderField
+                                    label="Nível de Atividade Física"
+                                    name="nivelAtividadeFisica"
+                                    value={formData.nivelAtividadeFisica}
+                                    min={30}
+                                    max={90}
+                                    unit=""
+                                    onChange={handleChange}
+                                />
 
-                    {/* Linha 3 */}
-                    <div className="form-group">
-                        <label htmlFor="pressaoArterial">Pressão Arterial</label>
-                        <input
-                            type="text"
-                            id="pressaoArterial"
-                            name="pressaoArterial"
-                            placeholder="Ex: 120/80"
-                            value={formData.pressaoArterial}
-                            onChange={handleChange}
-                            className="input"
-                            required
-                        />
-                    </div>
+                                <SliderField
+                                    label="Nível de Estresse"
+                                    name="nivelEstresse"
+                                    value={formData.nivelEstresse}
+                                    min={3}
+                                    max={8}
+                                    unit="/8"
+                                    onChange={handleChange}
+                                />
 
-                    <div className="form-group">
-                        <label htmlFor="frequenciaCardiaca">Freq. Cardíaca</label>
-                        <input
-                            type="number"
-                            id="frequenciaCardiaca"
-                            name="frequenciaCardiaca"
-                            min="65"
-                            max="86"
-                            value={formData.frequenciaCardiaca}
-                            onChange={handleChange}
-                            className="input"
-                            required
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="passosDiarios">Passos Diários</label>
-                        <div className="slider-container">
-                            <div className="slider-header">
-                                <span className="slider-value health">
-                                    {formData.passosDiarios.toLocaleString()}
-                                </span>
-                            </div>
-                            <input
-                                type="range"
-                                id="passosDiarios"
-                                name="passosDiarios"
-                                min="3000"
-                                max="10000"
-                                step="100"
-                                value={formData.passosDiarios}
-                                onChange={handleChange}
-                                className="slider health"
-                            />
-                            <div className="slider-labels">
-                                <span>3.000</span>
-                                <span>10.000</span>
+                                <SliderField
+                                    label="Passos Diários"
+                                    name="passosDiarios"
+                                    value={formData.passosDiarios}
+                                    min={3000}
+                                    max={10000}
+                                    step={100}
+                                    unit="passos"
+                                    onChange={handleChange}
+                                />
                             </div>
                         </div>
                     </div>
