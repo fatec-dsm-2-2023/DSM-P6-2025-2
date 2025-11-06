@@ -121,10 +121,6 @@ A API, documentada com `openapi.yaml`, expõe os seguintes endpoints principais 
   * `POST /questionarios`: Recebe os dados do questionário de saúde do paciente, processa através do modelo de IA e retorna o resultado da avaliação.
   * `GET /historico`: Retorna a lista de avaliações já realizadas pelo médico autenticado.
 
-# Imagens do APP, API e AI
-
-###       Video APP
-![alt text](docs/Imagens/APP.gif)   
 
 ### Imagens APP
 ![alt text](docs/Imagens/qemu-system-x86_64_nQeOUJGuQQ.png)   
@@ -136,8 +132,6 @@ A API, documentada com `openapi.yaml`, expõe os seguintes endpoints principais 
 ![alt text](docs/Imagens/qemu-system-x86_64_awzGWE4Lfe.png)
 ![alt text](docs/Imagens/qemu-system-x86_64_94IZlXeUF3.png)
 
-# Video AI
-![alt text](docs/Imagens/Processamento-AI.gif)   
 
 # API
 ![alt text](docs/Imagens/Code_zWGxsJF1V2.png)
