@@ -4,7 +4,6 @@
   align-items: center;
   padding: 0;
   gap: 0;
-  background-color: #f0f2f5;
   min-height: 100vh;
   box-sizing: border-box;
   font-family: Arial, sans-serif;
@@ -22,13 +21,12 @@
 
 .resultado-card {
   text-align: center;
-  padding: 30px 20px;
+  padding: 10px 10px;
   border-radius: 0;
   box-shadow: none;
-  width: 100%;
+  width: 80%;
   max-width: none;
 }
-
 
 .resultado-icon {
   margin-bottom: 15px;
@@ -92,6 +90,7 @@
   white-space: nowrap;
   margin-right: 10px;
   font-weight: normal;
+  order: 1; 
 }
 
 .data-item-row::after {
@@ -100,6 +99,7 @@
   border-bottom: 1px dashed #ccc;
   margin: 0 8px;
   align-self: center;
+  order: 2; 
 }
 
 .data-item-row .data-value {
@@ -107,6 +107,7 @@
   font-weight: bold;
   text-align: right;
   color: #333;
+  order: 3;
 }
 
 .action-buttons {

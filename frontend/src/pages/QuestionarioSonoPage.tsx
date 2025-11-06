@@ -9,7 +9,7 @@ const initialFormState: IQuestionarioSono = {
     nome: "",
     genero: "Male",
     idade: 35,
-    ocupacao: "Engineer",
+    ocupacao: "Engenheiro",
     duracaoSono: 7.0,
     qualidadeSono: 7,
     nivelAtividadeFisica: 60,
@@ -74,7 +74,7 @@ const QuestionarioSonoPage: React.FC = () => {
     const navigate = useNavigate();
 
     const ocupacoes = [
-        "Engineer", "Doctor", "Teacher", "Nurse", "Accountant",
+        "Engenheiro", "Doctor", "Teacher", "Nurse", "Accountant",
         "Software Developer", "Sales", "Manager", "Student", "Other"
     ];
 

@@ -74,8 +74,7 @@ const ResultadoPage: React.FC = () => {
 
     return (
         <div className="resultado-container">
-            <div
-                className={`resultado-card ${
+            <div className={`resultado-card ${
                     isHighRisk
                         ? "resultado-card--high-risk"
                         : "resultado-card--low-risk"
