@@ -74,7 +74,7 @@ const QuestionarioSonoPage: React.FC = () => {
     const navigate = useNavigate();
 
     const ocupacoes = [
-        "Engenheiro", "Doctor", "Teacher", "Nurse", "Accountant",
+        "Engeneer", "Doctor", "Teacher", "Nurse", "Accountant",
         "Software Developer", "Sales", "Manager", "Student", "Other"
     ];
 

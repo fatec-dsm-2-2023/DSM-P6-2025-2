@@ -68,7 +68,6 @@ const CadastroPage: React.FC = () => {
             [name]: value,
         }));
 
-        // Limpar erro do campo quando o usuário começar a digitar
         if (errors[name as keyof FormErrors]) {
             setErrors((prev) => ({
                 ...prev,
@@ -80,42 +79,36 @@ const CadastroPage: React.FC = () => {
     const validateForm = (): boolean => {
         const newErrors: FormErrors = {};
 
-        // Validação nome completo
         if (!formData.nomeCompleto.trim()) {
             newErrors.nomeCompleto = "Nome completo é obrigatório";
         } else if (formData.nomeCompleto.trim().length < 3) {
             newErrors.nomeCompleto = "Nome deve ter pelo menos 3 caracteres";
         }
 
-        // Validação CRM
         if (!formData.crm.trim()) {
             newErrors.crm = "CRM é obrigatório";
         } else if (!/^\d{4,6}$/.test(formData.crm.trim())) {
             newErrors.crm = "CRM deve conter entre 4 e 6 dígitos";
         }
 
-        // Validação email
         if (!formData.email.trim()) {
             newErrors.email = "E-mail é obrigatório";
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
             newErrors.email = "E-mail inválido";
         }
 
-        // Validação senha
         if (!formData.senha) {
             newErrors.senha = "Senha é obrigatória";
         } else if (formData.senha.length < 6) {
             newErrors.senha = "Senha deve ter pelo menos 6 caracteres";
         }
 
-        // Validação confirmar senha
         if (!formData.confirmarSenha) {
             newErrors.confirmarSenha = "Confirmação de senha é obrigatória";
         } else if (formData.senha !== formData.confirmarSenha) {
             newErrors.confirmarSenha = "Senhas não coincidem";
         }
 
-        // Validação especialidade
         if (!formData.especialidade) {
             newErrors.especialidade = "Especialidade é obrigatória";
         }

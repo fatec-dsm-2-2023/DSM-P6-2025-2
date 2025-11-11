@@ -15,7 +15,6 @@ const HistoricoPage: React.FC = () => {
         const fetchHistorico = async () => {
             try {
                 const response = await api.get<IAvaliacao[]>("/historico");
-                // Ordena do mais recente para o mais antigo
                 const sortedData = response.data.sort(
                     (a, b) =>
                         new Date(b.data).getTime() - new Date(a.data).getTime()

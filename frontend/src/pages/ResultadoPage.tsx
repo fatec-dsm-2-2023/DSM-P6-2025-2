@@ -44,7 +44,6 @@ const ResultadoPage: React.FC = () => {
     const { questionario, resultado } = state;
     const isHighRisk = resultado.predicao === 1;
 
-    // SVG para o ícone de "smiley" (usado apenas para baixo risco)
     const SmileyIcon = () => (
         <svg
             width="80"
@@ -72,28 +71,51 @@ const ResultadoPage: React.FC = () => {
         </svg>
     );
 
+    const SadIcon = () => (
+        <svg
+            width="80"
+            height="80"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <circle
+                cx="12"
+                cy="12"
+                r="10"
+                fill="#FFEBEE"
+                stroke="#F44336"
+                strokeWidth="2"
+            />
+            <circle cx="9" cy="10" r="1" fill="#F44336" />
+            <circle cx="15" cy="10" r="1" fill="#F44336" />
+            <path
+                d="M8 16 C9.5 14.5 14.5 14.5 16 16"
+                stroke="#F44336"
+                strokeWidth="2"
+                strokeLinecap="round"
+            />
+        </svg>
+    );
+
     return (
         <div className="resultado-container">
-            <div className={`resultado-card ${
-                    isHighRisk
-                        ? "resultado-card--high-risk"
-                        : "resultado-card--low-risk"
+            <div className={`resultado-card ${isHighRisk
+                    ? "resultado-card--high-risk"
+                    : "resultado-card--low-risk"
                 }`}
             >
                 <div className="resultado-icon">
-                    {/* Usa smiley para baixo risco, AlertTriangle para alto risco */}
                     {isHighRisk ? (
-                        <AlertTriangle size={48} color="#ff3407ff" />
+                        <SadIcon />
                     ) : (
                         <SmileyIcon />
                     )}
                 </div>
 
-                {/* Remove o h2 "Resultado da Avaliação" e transforma risk-badge em título principal */}
                 <div
-                    className={`risk-status-text ${
-                        isHighRisk ? "high-risk" : "low-risk"
-                    }`}
+                    className={`risk-status-text ${isHighRisk ? "high-risk" : "low-risk"
+                        }`}
                 >
                     {isHighRisk ? "ALTO RISCO" : "BAIXO RISCO"}
                 </div>
@@ -103,12 +125,10 @@ const ResultadoPage: React.FC = () => {
 
             <div className="summary-card card">
                 <div className="summary-header">
-                    {/* Remove o ícone User e muda o título */}
                     <h3>Resumo dos Dados Enviados</h3>
                 </div>
 
                 <div className="patient-info">
-                    {/* Transforma toda a estrutura em uma lista simples com linhas tracejadas */}
                     <div className="data-list">
                         <div className="data-item-row">
                             <span className="data-label">Nome do Paciente</span>
@@ -200,7 +220,6 @@ const ResultadoPage: React.FC = () => {
             </div>
 
             <div className="action-buttons">
-                {/* Remove o ícone ArrowLeft e muda o texto */}
                 <button
                     onClick={() => navigate("/home")}
                     className="btn btn-primary"

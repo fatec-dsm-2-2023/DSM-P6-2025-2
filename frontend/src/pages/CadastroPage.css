@@ -47,7 +47,6 @@
     }
 }
 
-/* Header */
 .cadastro-header {
     text-align: center;
     margin-bottom: 30px;
@@ -75,7 +74,6 @@
     font-weight: 500;
 }
 
-/* Ícone e Título */
 .cadastro-icon-section {
     text-align: center;
     margin-bottom: 40px;
@@ -119,7 +117,6 @@
     font-weight: 400;
 }
 
-/* Formulário */
 .cadastro-form {
     display: flex;
     flex-direction: column;
@@ -221,7 +218,6 @@
     font-size: 12px;
 }
 
-/* Botões */
 .form-buttons {
     display: flex;
     flex-direction: column;
@@ -260,7 +256,6 @@
     }
 }
 
-/* Footer */
 .cadastro-footer {
     text-align: center;
     margin-top: 30px;
@@ -282,7 +277,6 @@
     text-decoration: underline;
 }
 
-/* Responsividade */
 @media (max-width: 768px) {
     .cadastro-container {
         padding: 10px;
@@ -356,7 +350,6 @@
     }
 }
 
-/* Estados de hover e focus aprimorados */
 .form-input:hover:not(:focus) {
     border-color: rgba(102, 126, 234, 0.3);
 }
@@ -365,7 +358,6 @@
     border-color: rgba(102, 126, 234, 0.3);
 }
 
-/* Animações suaves para os botões */
 .btn-large:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
@@ -375,7 +367,6 @@
     transform: translateY(0);
 }
 
-/* Melhorias de acessibilidade */
 @media (prefers-reduced-motion: reduce) {
     .cadastro-content,
     .icon-circle,
@@ -387,7 +378,6 @@
     }
 }
 
-/* Estados de foco para acessibilidade */
 .btn-large:focus-visible,
 .form-input:focus-visible,
 .form-select:focus-visible,

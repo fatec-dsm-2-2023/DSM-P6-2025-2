@@ -110,13 +110,11 @@
 
 .avaliacao-data {
     display: flex;
-    justify-content: space-between; /* empurra elementos para as extremidades */
-    /* align-items: left; centraliza verticalmente */
-    /* gap: 1rem; opcional, para dar espaço */
+    justify-content: space-between; 
 }
 
 .risco-badge {
-    flex-shrink: 0; /* garante que o badge não encolha */
+    flex-shrink: 0; 
     padding: 0.25rem 0.5rem;
     border-radius: 12px;
     font-weight: 600;
@@ -180,8 +178,7 @@
     .avaliacao-detalhes {
         grid-template-columns: 1fr;
         gap: 0.5rem;
-    }  
-
+    } 
 }
 
 @media (max-width: 480px) {
