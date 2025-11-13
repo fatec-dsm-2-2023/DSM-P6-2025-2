@@ -95,6 +95,32 @@ const ToggleField: React.FC<ToggleFieldProps> = ({
     </div>
 );
 
+interface TooltipIconProps {
+    content: string;
+}
+
+const TooltipIcon: React.FC<TooltipIconProps> = ({ content }) => {
+    const [isVisible, setIsVisible] = useState(false);
+
+    return (
+        <div className="tooltip-container">
+            <Info
+                size={14}
+                className="info-icon"
+                onMouseEnter={() => setIsVisible(true)}
+                onMouseLeave={() => setIsVisible(false)}
+            />
+            {isVisible && (
+                <div className="tooltip">
+                    <div className="tooltip-content">
+                        {content}
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
 const QuestionarioPage: React.FC = () => {
     const [formData, setFormData] = useState<IQuestionario>(initialFormState);
     const [isLoading, setIsLoading] = useState(false);
@@ -155,6 +181,16 @@ const QuestionarioPage: React.FC = () => {
         }
     };
 
+    const tooltipContent = {
+        inclinacaoST: "Inclinação do Pico do Segmento ST\n\nEste campo descreve a inclinação do segmento ST no eletrocardiograma durante o pico do exercício.\n\n• Normal (Flat): Risco intermediário.\n\n• Ascendente (Upsloping): Geralmente considerado de baixo risco.\n\n• Descendente (Downsloping): Geralmente indica um maior risco de isquemia miocárdica (fluxo sanguíneo inadequado para o coração).",
+
+        oldpeak: "Oldpeak\n\nRefere-se à depressão do segmento ST induzida pelo exercício em relação ao estado de repouso.\n\nÉ um importante indicador eletrocardiográfico de isquemia miocárdica.",
+
+        dorPeito: "Tipos de Dor no Peito\n\n• Angina Típica: Dor torácica clássica relacionada ao esforço ou estresse, aliviada com repouso.\n\n• Angina Atípica: Dor que não preenche todos os critérios da angina típica.\n\n• Dor Não-anginosa: Dor no peito que provavelmente não é de origem cardíaca.\n\n• Assintomático: Ausência de dor no peito.",
+
+        ecg: "Eletrocardiograma em Repouso\n\nResultados:\n\n• Normal: Sem anormalidades significativas.\n\n• Anormalidade da onda ST-T: Pode indicar problemas de repolarização ventricular, isquemia, entre outros.\n\n• Hipertrofia ventricular esquerda: Sugere um aumento da massa muscular do ventrículo esquerdo, frequentemente associado à hipertensão."
+    };
+
     return (
         <div className="questionario-container">
             <div className="questionario-header">
@@ -179,9 +215,9 @@ const QuestionarioPage: React.FC = () => {
                                 value={formData.nome}
                                 onChange={handleChange}
                                 placeholder="Nome completo"
-                                className="input "
+                                className="input"
                             />
-                        </div>                        
+                        </div>
 
                         <div className="form-group">
                             <label htmlFor="age">Idade</label>
@@ -262,7 +298,10 @@ const QuestionarioPage: React.FC = () => {
                             </div>
                             <div className="column-content">
                                 <div className="form-group">
-                                    <label htmlFor="restingECG">Eletrocardiograma em Repouso</label>
+                                    <label htmlFor="restingECG" className="label-with-tooltip">
+                                        Eletrocardiograma em Repouso
+                                        <TooltipIcon content={tooltipContent.ecg} />
+                                    </label>
                                     <select
                                         id="restingECG"
                                         name="restingECG"
@@ -279,7 +318,10 @@ const QuestionarioPage: React.FC = () => {
                                 <div></div>
 
                                 <div className="form-group">
-                                    <label htmlFor="chestPainType">Tipo de Dor no Peito</label>
+                                    <label htmlFor="chestPainType" className="label-with-tooltip">
+                                        Tipo de Dor no Peito
+                                        <TooltipIcon content={tooltipContent.dorPeito} />
+                                    </label>
                                     <select
                                         id="chestPainType"
                                         name="chestPainType"
@@ -297,7 +339,10 @@ const QuestionarioPage: React.FC = () => {
                                 <div></div>
 
                                 <div className="form-group">
-                                    <label htmlFor="stSlope">Inclinação do Pico do Segmento ST</label>
+                                    <label htmlFor="stSlope" className="label-with-tooltip">
+                                        Inclinação do Pico do Segmento ST
+                                        <TooltipIcon content={tooltipContent.inclinacaoST} />
+                                    </label>
                                     <select
                                         id="stSlope"
                                         name="stSlope"
@@ -320,10 +365,10 @@ const QuestionarioPage: React.FC = () => {
                             <div className="column-content">
                                 <SliderField
                                     label={
-                                        <>
+                                        <span className="label-with-tooltip">
                                             Oldpeak (Depressão de ST por exercício)
-                                            <Info size={14} className="info-icon" />
-                                        </>
+                                            <TooltipIcon content={tooltipContent.oldpeak} />
+                                        </span>
                                     }
                                     name="oldpeak"
                                     value={formData.oldpeak}

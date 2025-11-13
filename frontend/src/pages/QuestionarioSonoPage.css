@@ -224,6 +224,22 @@
     font-weight: 500;
 }
 
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+    margin-left: 4px;
+}
+
+.info-icon {
+    cursor: help;
+    color: #6b7280;
+    transition: color 0.2s ease;
+}
+
+.info-icon:hover {
+    color: #374151;
+}
+
 @media (max-width: 1200px) {
     .exams-symptoms-grid {
         grid-template-columns: repeat(2, 1fr);
