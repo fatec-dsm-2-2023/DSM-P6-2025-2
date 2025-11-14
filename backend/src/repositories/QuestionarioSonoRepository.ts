@@ -1,48 +1,58 @@
-import { AppDataSource } from "../config/database";
-import { QuestionarioSono } from "../models/entities/QuestionarioSono";
-import { IQuestionarioSono } from "../models/interfaces/IQuestionarioSono";
+import { AppDataSource } from "../../config/database";
+import { QuestionarioSono } from "../entities/QuestionarioSono";
+import { IQuestionarioSono, IQuestionarioSonoCreate } from "../interfaces/IQuestionarioSono";
 
 export class QuestionarioSonoRepository {
     private repository = AppDataSource.getRepository(QuestionarioSono);
 
-    /**
-     * Cria e salva um novo questionário de sono no banco de dados
-     * @param questionarioData Dados do questionário de sono
-     * @returns O registro criado
-     */
-    async create(questionarioData: IQuestionarioSono): Promise<QuestionarioSono> {
-        const questionarioSono = this.repository.create(questionarioData);
-        return await this.repository.save(questionarioSono);
+    async create(questionarioData: IQuestionarioSonoCreate): Promise<QuestionarioSono> {
+        const questionario = new QuestionarioSono();
+        
+        questionario.gender = questionarioData.gender;
+        questionario.age = questionarioData.age;
+        questionario.occupation = questionarioData.occupation;
+        questionario.sleepDuration = questionarioData.sleepDuration;
+        questionario.qualityOfSleep = questionarioData.qualityOfSleep;
+        questionario.physicalActivityLevel = questionarioData.physicalActivityLevel;
+        questionario.stressLevel = questionarioData.stressLevel;
+        questionario.bmiCategory = questionarioData.bmiCategory;
+        questionario.bloodPressure = questionarioData.bloodPressure;
+        questionario.heartRate = questionarioData.heartRate;
+        questionario.dailySteps = questionarioData.dailySteps;
+        questionario.pacienteId = questionarioData.pacienteId;
+
+        return await this.repository.save(questionario);
     }
 
-    /**
-     * Busca um questionário de sono pelo ID (person_id)
-     * @param person_id Identificador do questionário de sono
-     * @returns O registro encontrado ou null
-     */
-    async findById(person_id: number): Promise<QuestionarioSono | null> {
-        return await this.repository.findOne({ where: { person_id } });
+    async findById(id: string): Promise<QuestionarioSono | null> {
+        return await this.repository.findOne({
+            where: { id },
+            relations: ["paciente", "avaliacao"]
+        });
     }
 
-    /**
-     * Retorna todos os questionários de sono cadastrados
-     */
+    async findByPacienteId(pacienteId: string): Promise<QuestionarioSono[]> {
+        return await this.repository.find({
+            where: { pacienteId },
+            relations: ["avaliacao"],
+            order: { createdAt: "DESC" }
+        });
+    }
+
     async findAll(): Promise<QuestionarioSono[]> {
-        return await this.repository.find();
+        return await this.repository.find({
+            relations: ["paciente", "avaliacao"],
+            order: { createdAt: "DESC" }
+        });
     }
 
-    /**
-     * Atualiza um questionário de sono existente
-     */
-    async update(person_id: number, data: Partial<IQuestionarioSono>): Promise<QuestionarioSono | null> {
-        await this.repository.update({ person_id }, data);
-        return this.findById(person_id);
+    async update(id: string, questionarioData: Partial<IQuestionarioSono>): Promise<QuestionarioSono | null> {
+        await this.repository.update(id, questionarioData);
+        return await this.findById(id);
     }
 
-    /**
-     * Remove um questionário de sono pelo ID
-     */
-    async delete(person_id: number): Promise<void> {
-        await this.repository.delete({ person_id });
+    async delete(id: string): Promise<boolean> {
+        const result = await this.repository.delete(id);
+        return result.affected !== 0;
     }
 }

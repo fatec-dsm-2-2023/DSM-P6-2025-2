@@ -10,6 +10,7 @@ import { Avaliacao } from "./Avaliacao";
 
 @Entity("medicos")
 export class Medico {
+    [x: string]: any;
     @PrimaryGeneratedColumn("uuid")
     id: string;
 

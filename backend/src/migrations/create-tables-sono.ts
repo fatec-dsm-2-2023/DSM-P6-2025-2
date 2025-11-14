@@ -2,47 +2,79 @@ import { MigrationInterface, QueryRunner } from "typeorm";
 
 export class CreateTableQuestionariosSono1748990904206 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Criar tabela de questionários de sono
         await queryRunner.query(`
-      CREATE TABLE questionarios_sono (
-        person_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        gender ENUM('Male', 'Female') NOT NULL,
-        age INT NOT NULL,
-        occupation VARCHAR(100) NOT NULL,
-        sleep_duration DECIMAL(3,1) NOT NULL,
-        quality_of_sleep INT NOT NULL,
-        physical_activity_level INT NOT NULL,
-        stress_level INT NOT NULL,
-        bmi_category VARCHAR(50) NOT NULL,
-        blood_pressure VARCHAR(10) NOT NULL,
-        heart_rate INT NOT NULL,
-        daily_steps INT NOT NULL,
-        sleep_disorder VARCHAR(50) NULL,
-        createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-    `);
+            CREATE TABLE questionarios_sono (
+                id VARCHAR(36) NOT NULL PRIMARY KEY,
+                gender TINYINT NOT NULL,
+                age INT NOT NULL,
+                occupation VARCHAR(100) NOT NULL,
+                sleep_duration DECIMAL(3,1) NOT NULL,
+                quality_of_sleep INT NOT NULL,
+                physical_activity_level INT NOT NULL,
+                stress_level INT NOT NULL,
+                bmi_category VARCHAR(50) NOT NULL,
+                blood_pressure VARCHAR(10) NOT NULL,
+                heart_rate INT NOT NULL,
+                daily_steps INT NOT NULL,
+                sleep_disorder VARCHAR(50) NULL,
+                paciente_id VARCHAR(36) NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                INDEX idx_paciente_id (paciente_id),
+                INDEX idx_created_at (created_at)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        `);
 
-        // Opcional: se quiser vincular com a tabela de avaliações
+        // Criar tabela de avaliações de sono
         await queryRunner.query(`
-      ALTER TABLE avaliacoes
-      ADD COLUMN questionario_sono_id INT NULL,
-      ADD CONSTRAINT fk_avaliacao_questionario_sono
-        FOREIGN KEY (questionario_sono_id)
-        REFERENCES questionarios_sono(person_id)
-        ON DELETE CASCADE,
-      ADD UNIQUE KEY (questionario_sono_id);
-    `);
+            CREATE TABLE avaliacoes_sono (
+                id VARCHAR(36) NOT NULL PRIMARY KEY,
+                resultado TINYINT NOT NULL,
+                recomendacao TEXT NULL,
+                data TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                medico_id VARCHAR(36) NOT NULL,
+                questionario_sono_id VARCHAR(36) NOT NULL UNIQUE,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                CONSTRAINT fk_avaliacao_sono_medico
+                    FOREIGN KEY (medico_id)
+                    REFERENCES medicos(id)
+                    ON DELETE CASCADE,
+                CONSTRAINT fk_avaliacao_sono_questionario
+                    FOREIGN KEY (questionario_sono_id)
+                    REFERENCES questionarios_sono(id)
+                    ON DELETE CASCADE,
+                INDEX idx_medico_id (medico_id),
+                INDEX idx_questionario_sono_id (questionario_sono_id),
+                INDEX idx_data (data)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        `);
+
+        // Se você quiser também relacionar com a tabela de avaliações existente (opcional)
+        await queryRunner.query(`
+            ALTER TABLE avaliacoes 
+            ADD COLUMN questionario_sono_id VARCHAR(36) NULL,
+            ADD CONSTRAINT fk_avaliacao_questionario_sono
+                FOREIGN KEY (questionario_sono_id)
+                REFERENCES questionarios_sono(id)
+                ON DELETE SET NULL,
+            ADD INDEX idx_avaliacao_questionario_sono (questionario_sono_id);
+        `);
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        // Remover relacionamento primeiro (se existir)
+        // Remover relacionamento da tabela de avaliações existente (se existir)
         await queryRunner.query(`
-      ALTER TABLE avaliacoes
-      DROP FOREIGN KEY fk_avaliacao_questionario_sono,
-      DROP COLUMN questionario_sono_id,
-      DROP INDEX questionario_sono_id;
-    `);
+            ALTER TABLE avaliacoes
+            DROP FOREIGN KEY fk_avaliacao_questionario_sono,
+            DROP COLUMN questionario_sono_id,
+            DROP INDEX idx_avaliacao_questionario_sono;
+        `);
 
-        // Remover tabela principal
+        // Remover tabela de avaliações de sono
+        await queryRunner.query(`DROP TABLE avaliacoes_sono`);
+
+        // Remover tabela de questionários de sono
         await queryRunner.query(`DROP TABLE questionarios_sono`);
     }
 }
